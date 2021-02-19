@@ -1,0 +1,42 @@
+package BOJ;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Stack;
+import java.util.StringTokenizer;
+
+public class boj_도키도키간식드리미_12789 {
+	public static void main(String[] args) throws Exception {
+		System.setIn(new FileInputStream("12789.txt"));
+		Stack<Integer> stack = new Stack<>();
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int index = 1; // 번호표 순서대로
+		for (int i = 0; i < T; i++) {
+			int temp = Integer.parseInt(st.nextToken()); // 입력 사람이
+			if (temp == index) { // 이번 순서와 같으면
+				index++; // 순서를 ++
+				continue;
+			}
+			while (!stack.isEmpty() && stack.peek() == index) { // 이번 입력 사람이 순서와 다른 경우 공간을 확인함
+				stack.pop(); // 공간의 가장 윗부분의 사람이 이번 순서인 경우 pop
+				index++;
+			}
+			stack.push(temp); // 공간에 입력 사람을 넣어줌
+
+		}
+		while (!stack.isEmpty() && stack.peek() == index) { // 입력이 모두 끝나고 공간의 사람들을 체크
+			stack.pop();
+			index++;
+		}
+
+		if (stack.isEmpty()) {
+			System.out.println("Nice");
+		} else {
+			System.out.println("Sad");
+		}
+	}
+}
