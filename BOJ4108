@@ -1,0 +1,56 @@
+package BOJ;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class boj_지뢰찾기_4108 {
+	static char[][] map;
+	static char[][] answer;
+
+	public static void main(String[] args) throws Exception {
+		System.setIn(new FileInputStream("4108.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		while (true) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int R = Integer.parseInt(st.nextToken());
+			int C = Integer.parseInt(st.nextToken());
+			if (R == 0 && C == 0)
+				break; // 종료 조건
+			map = new char[R][C];
+			answer = new char[R][C];
+			for (int i = 0; i < R; i++) { // 맵입력
+				map[i] = br.readLine().toCharArray();
+			}
+			int[] dr = { -1, 1, 0, 0, -1, 1, 1, -1 };
+			int[] dc = { 0, 0, -1, 1, -1, 1, -1, 1 };
+			for (int i = 0; i < R; i++) {
+				for (int j = 0; j < C; j++) {
+					int count = 0;
+					if (map[i][j] == '*') {//지뢰면 연산하지않고 지뢰를 입력함
+						answer[i][j] = '*';
+					} else {// map[i][j] == '.' //지뢰가 아니면
+						for (int d = 0; d < 8; d++) {
+							int nr = i + dr[d];
+							int nc = j + dc[d];
+							if (nr >= 0 && nr < R && nc >= 0 && nc < C) { //범위가 유효한지
+								if (map[nr][nc] == '*') { //이동한 곳이 지뢰면 count를 해줌
+									count++;
+								}
+							}
+						}
+						answer[i][j] = (char) (count + '0'); // int to char
+					}
+				}
+			}
+
+			for (int i = 0; i < R; i++) { // 출력
+				for (int j = 0; j < C; j++) {
+					System.out.print(answer[i][j]);
+				}
+				System.out.println();
+			}
+		}
+	}
+}
