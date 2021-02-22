@@ -1,0 +1,52 @@
+package BOJ;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class BOJ_근손실_18429 {
+	static int[] kit;
+	static int N, K, answer;
+	static int[] tgt;
+	static boolean[] select;
+
+	public static void main(String[] args) throws Exception {
+		System.setIn(new FileInputStream("18429.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken()); // N일
+		K = Integer.parseInt(st.nextToken()); // 하루의 운동 감소량
+		kit = new int[N];
+		tgt = new int[N];
+		select = new boolean[N];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) { // 배열에 각 키트의 운동 증가량을 입력해줌
+			kit[i] = Integer.parseInt(st.nextToken());
+		}
+		// tgt = new int[N];
+		// 순서가 중요하므로 nPn
+		perm(0, 500);
+		System.out.println(answer);
+	}
+
+	private static void perm(int tgtIdx, int w) {
+		if (tgtIdx == N) {
+			answer++;
+			return;
+		}
+		if (w < 500) {
+			return;
+		}
+		for (int i = 0; i < kit.length; i++) {
+			if (select[i])
+				continue;
+			tgt[tgtIdx] = kit[i];
+			select[i] = true;
+			perm(tgtIdx + 1, w - K + tgt[tgtIdx]);
+			select[i] = false;
+		}
+
+	}
+
+}
