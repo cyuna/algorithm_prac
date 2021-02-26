@@ -1,0 +1,94 @@
+package BOJ;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.StringTokenizer;
+
+public class BOJ_토마토_7576 {
+	static int M, N;
+	static int[][] map;
+	static int level;
+	static Queue<int[]> q = new LinkedList<>();
+
+	public static void main(String[] args) throws Exception {
+		// TODO Auto-generated method stub
+		System.setIn(new FileInputStream("7576.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		M = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
+		map = new int[N][M];
+		
+		for (int i = 0; i < N; i++) { // 입력
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < M; j++) {
+				int temp = Integer.parseInt(st.nextToken());
+				map[i][j] = temp;
+				if (temp == 1) {
+					int[] temppose = { i, j, 0 }; //탐색해야하는 좌표를 큐에 넣어줌 
+					q.offer(temppose);
+				}
+			}
+		}
+		while (!q.isEmpty()) {
+//			if (check()) 			//큐의 좌표를 모두 탐색하기 전에 토마토가 모두 익었는지를 체크해주면 1000*1000 시간초과 발생
+//				break;
+			int[] temp = q.poll(); 	 //큐에 있는 좌표를 하나씩 탐색해줌 
+			int x = temp[0];
+			int y = temp[1];
+			level = temp[2];
+			if (map[x][y] == 1) {
+				go(x, y, level);
+			}
+		}
+		for (int i = 0; i < N; i++) { 	//익지 못한 토마토가 있는 경우에는 -1 출력
+			for (int j = 0; j < M; j++) {
+				if (map[i][j] == 0)
+					level = -1;
+			}
+		}
+		System.out.println(level);
+	}
+
+	static int[] dx = { -1, 1, 0, 0 };
+	static int[] dy = { 0, 0, 1, -1 };
+
+	private static void go(int n, int m, int level) { // 하루치 숙성
+		for (int d = 0; d < 4; d++) {
+			int nx = n + dx[d];
+			int ny = m + dy[d];
+			if (nx >= 0 && ny >= 0 && nx < N && ny < M && map[nx][ny] == 0) {
+				map[nx][ny] = 1;
+				int[] temp = { nx, ny, level + 1 };
+				q.offer(temp);	
+			}
+		}
+	}
+
+	private static boolean check() { // 체크
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (map[i][j] == 0)
+					return false;
+			}
+		}
+		return true;
+	}
+
+	private static void print() {
+		for (int i = 0; i < N; i++) { // 출력
+			for (int j = 0; j < M; j++) {
+				System.out.print(map[i][j]);
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+
+}
