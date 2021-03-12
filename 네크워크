@@ -1,0 +1,31 @@
+package Programmers;
+
+public class 네트워크 {
+	static int n = 3;
+	static int[][] computers = { { 1, 1, 0 }, { 1, 1, 1 }, { 0, 1, 1 } };
+	static int[] visited;
+
+	public static void main(String[] args) {
+		visited = new int[n];
+        int answer = 1;
+        for (int i = 0; i < n; i++) {
+			if (visited[i] != 0) {
+				continue;
+			}
+			dfs(computers, n, i, answer++);
+		}
+       System.out.println(answer-1);
+    }
+    
+    private static void dfs(int[][] computers, int n, int index, int k) {
+		if (visited[index] != 0) {
+			return;
+		}
+		visited[index] = k;
+		for (int j = 0; j < n; j++) {
+			if (computers[index][j] == 1) {
+				dfs(computers, n, j, k);
+			}
+		}
+	}
+}
