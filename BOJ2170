@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class BOJ2170 {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		int[][] pos = new int[T][2]; 
+		int ans = 0;
+		
+		for (int i = 0; i < T; i++) { //좌표 입력
+			String str = br.readLine();
+			StringTokenizer st = new StringTokenizer(str);
+			int x = Integer.parseInt(st.nextToken());
+			int y = Integer.parseInt(st.nextToken());
+			pos[i][0] = x;
+            pos[i][1] = y;			
+		}
+		
+		Arrays.sort(pos, (o1, o2) -> { //x 좌표 기준 정렬
+			int diff = o1[0] - o2[0];
+			return diff != 0 ? diff : o1[1] - o2[1];
+		});
+		
+		int lastX = pos[0][0];
+		int lastY = pos[0][1];
+		ans += lastY - lastX;
+		
+		for(int i = 1; i < T; i++) {
+			int curX = pos[i][0];
+			int curY = pos[i][1];
+			
+			if(lastX <= curX && curY <= lastY ) //포함
+				continue;
+			else if(curX < lastY) { //한쪽만 포함
+				ans += curY - lastY;
+			}
+			else {
+				ans += curY - curX;
+			}
+			lastX = curX;
+			lastY = curY;		
+		}
+		System.out.println(ans);
+	}
+}
